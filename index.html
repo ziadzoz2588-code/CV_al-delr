@@ -1,0 +1,774 @@
+Enter<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>『 ÄḶ.ḊЁḶṚ 』- Creative Frontend Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== CSS Variables ========== */
+        :root {
+            --red: #c0392b;
+            --red-glow: #e74c3c;
+            --green: #27ae60;
+            --green-glow: #2ecc71;
+            --bg: #0a0a0a;
+            --bg2: #111114;
+            --glass: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.08);
+            --text: #e0e0e0;
+            --muted: #888;
+        }
+
+        /* ========== Reset ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ========== Body ========== */
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            cursor: none;
+        }
+
+        /* ========== Custom Cursor ========== */
+        #cursor-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--green-glow);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 12px var(--green-glow), 0 0 25px var(--green);
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s;
+        }
+        #cursor-ring {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid rgba(39,174,96,0.5);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: left 0.12s ease, top 0.12s ease, width 0.2s, height 0.2s, border-color 0.2s;
+        }
+        body:hover #cursor-ring { border-color: rgba(192,57,43,0.6); }
+
+        /* ========== Particle Trail ========== */
+        .trail-particle {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9990;
+            animation: fadeTrail 0.6s forwards;
+        }
+        @keyframes fadeTrail {
+            0%   { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* ========== Canvas Background ========== */
+        .video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* عشان يفضل ورا المحتوى */
+    overflow: hidden;
+}
+
+.video-background video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+/* طبقة تعتيم عشان الكلام يبان */
+.video-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); 
+}
+ 
+
+        /* ========== Content Layer ========== */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 720px;
+            padding: 30px 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ========== Logo ========== */
+        .logo-container {
+            margin-top: 20px;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .logo-ring {
+            position: absolute;
+            inset: -14px;
+            border-radius: 50%;
+            border: 2px dashed rgba(39,174,96,0.3);
+            animation: spinReverse 12s linear infinite;
+        }
+        @keyframes spinReverse {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(-360deg); }
+        }
+
+        .rotating-logo {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--green);
+            box-shadow: 0 0 25px var(--green), 0 0 12px var(--red);
+            animation: spin 10s linear infinite, floatLogo 4s ease-in-out infinite;
+            cursor: pointer;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes floatLogo {
+            0%, 100% { box-shadow: 0 0 25px var(--green), 0 0 12px var(--red); margin-top: 0px; }
+            50%       { box-shadow: 0 0 50px var(--green-glow), 0 0 28px var(--red-glow); margin-top: -8px; }
+        }
+
+        .rotating-logo:active {
+            filter: hue-rotate(90deg) brightness(1.3);
+        }
+
+        /* ========== Title ========== */
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--green-glow), #fff, var(--red-glow), var(--green-glow));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s ease infinite;
+            margin: 12px 0 6px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        @keyframes gradientShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.05rem;
+            color: var(--green-glow);
+            margin-bottom: 28px;
+            text-align: center;
+            opacity: 0.85;
+            letter-spacing: 1px;
+        }
+
+        /* ========== Tabs ========== */
+        input[type="radio"] { display: none; }
+
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .tab-label {
+            background: var(--glass);
+            border: 2px solid var(--red);
+            color: var(--text);
+            padding: 11px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-label::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .tab-label:hover::after { transform: translateX(100%); }
+        .tab-label:hover {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 0 22px var(--red);
+        }
+
+        /* Active tab highlight */
+        #tab1:checked ~ .tabs-container label[for="tab1"],
+        #tab2:checked ~ .tabs-container label[for="tab2"],
+        #tab3:checked ~ .tabs-container label[for="tab3"] {
+            background: var(--green);
+            border-color: var(--green);
+            color: #000;
+            font-weight: 900;
+            box-shadow: 0 0 22px var(--green);
+        }
+
+        /* ========== Sections ========== */
+        .sections-area { width: 100%; margin-bottom: 20px; }
+
+        .section {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1),
+                        opacity 0.45s ease,
+                        transform 0.45s ease,
+                        padding 0.4s;
+            background: var(--glass);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-right: 4px solid var(--green);
+            border-radius: 16px;
+            padding: 0 20px;
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        #tab1:checked ~ .sections-area #section1,
+        #tab2:checked ~ .sections-area #section2,
+        #tab3:checked ~ .sections-area #section3 {
+            max-height: 700px;
+            opacity: 1;
+            transform: translateY(0);
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        /* ========== Section 1: About ========== 
+        .typewriter-text {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #ddd;
+            font-family: 'Cairo', sans-serif;
+        }
+
+         ========== Section 2: Skills ==========*/
+        .skills-list {
+            list-style: none;
+            padding: 0;
+        }
+        .skills-list li {
+            padding: 11px 16px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--glass-border);
+            border-right: 3px solid var(--red);
+            border-radius: 8px;
+            transition: 0.3s;
+            font-size: 1.05rem;
+            font-family: 'Cairo', sans-serif;
+        }
+        .skills-list li:hover {
+            background: rgba(192,57,43,0.12);
+            border-right-color: var(--green);
+            transform: translateX(6px);
+            box-shadow: inset 0 0 15px rgba(39,174,96,0.05);
+        }
+
+        /* ========== Section 3: Contact ========== */
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 18px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--green);
+            border-radius: 12px;
+            color: var(--text);
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 1.05rem;
+            font-family: 'Cairo', sans-serif;
+        }
+        .contact-link:hover {
+            background: var(--green);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 0 25px var(--green);
+            transform: translateY(-2px);
+        }
+        .contact-icon { font-size: 1.7rem; }
+
+        /* ========== Skills Accordion Card ========== */
+        .skills-card {
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            border-top: 2px solid var(--red);
+            border-radius: 18px;
+            padding: 24px;
+            margin: 18px 0;
+            box-shadow: 0 0 30px rgba(192,57,43,0.12), 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .skills-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--green-glow);
+            margin-bottom: 18px;
+            text-align: center;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* Accordion Item */
+        .acc-item { margin: 10px 0; }
+        .acc-cb { display: none; }
+
+        .acc-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-right: 3px solid var(--red);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            color: #ddd;
+            transition: 0.3s;
+            user-select: none;
+        }
+        .acc-label:hover {
+            background: rgba(192,57,43,0.1);
+            border-right-color: var(--green);
+            color: #fff;
+        }
+        .acc-label .arrow {
+            font-size: 0.85rem;
+            transition: transform 0.4s;
+            color: var(--green);
+        }
+
+        .acc-body {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1),
+                        opacity 0.35s ease,
+                        transform 0.35s ease,
+                        padding 0.35s;
+            background: rgba(39,174,96,0.04);
+            border: 1px solid transparent;
+            border-radius: 0 0 10px 10px;
+            font-size: 0.97rem;
+            color: #bbb;
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.8;
+        }
+
+        /* Open state */
+        .acc-cb:checked ~ .acc-label {
+            background: rgba(39,174,96,0.12);
+            border-right-color: var(--green);
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        .acc-cb:checked ~ .acc-label .arrow {
+            transform: rotate(180deg);
+            color: var(--red-glow);
+        }
+        .acc-cb:checked ~ .acc-body {
+            max-height: 200px;
+            opacity: 1;
+            transform: translateY(0);
+            padding: 14px 18px;
+            border-color: var(--glass-border);
+            border-top: none;
+        }
+
+        /* Stagger animation on acc-items */
+        .acc-item:nth-child(1) { animation: fadeUp 0.5s 0.05s both; }
+        .acc-item:nth-child(2) { animation: fadeUp 0.5s 0.12s both; }
+        .acc-item:nth-child(3) { animation: fadeUp 0.5s 0.19s both; }
+        .acc-item:nth-child(4) { animation: fadeUp 0.5s 0.26s both; }
+        .acc-item:nth-child(5) { animation: fadeUp 0.5s 0.33s both; }
+        .acc-item:nth-child(6) { animation: fadeUp 0.5s 0.40s both; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== Progress bar inside acc-body ========== */
+        .skill-bar-wrap {
+            background: rgba(255,255,255,0.06);
+            border-radius: 20px;
+            height: 7px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .skill-bar {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, var(--green), var(--green-glow));
+            box-shadow: 0 0 8px var(--green);
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
+        .acc-cb:checked ~ .acc-body .skill-bar { width: var(--pct); }
+
+        /* ========== Footer ========== */
+        .footer {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            color: var(--muted);
+            font-size: 0.88rem;
+            font-family: 'Cairo', sans-serif;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 18px;
+            position: relative;
+            z-index: 10;
+        }
+        .footer span { color: var(--green-glow); font-weight: bold; }
+
+        /* ========== Mobile ========== */
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.7rem; }
+            .rotating-logo { width: 130px; height: 130px; }
+            .tab-label { padding: 10px 16px; font-size: 0.88rem; }
+        }
+        
+        
+        
+        .typewriter-text {
+    font-size: 1rem;
+    line-height: 1.8; /* لزيادة المسافة بين السطور ومنع تداخلها */
+    color: #ddd;
+    font-family: 'Cairo', sans-serif;
+    text-align: right; /* المحاذاة لليمين لأنك كاتب بالعربي */
+    direction: rtl;    /* تحديد اتجاه الكتابة من اليمين لليسار */
+    white-space: pre-line; /* عشان يحترم المسافات والنزول لسطر جديد اللي أنت عملته */
+    padding: 10px;
+}
+
+/* لو عايز الكلمات الإنجليزية تظهر بشكل أفضل وسط العربي */
+.typewriter-text span.en {
+    font-family: 'Orbitron', sans-serif;
+    direction: ltr;
+    display: inline-block;
+    color: var(--green-glow);
+}
+ 
+    </style>
+</head>
+<body>
+
+    <!-- Cursor -->
+    <div class="video-background">
+    <video autoplay muted loop playsinline>
+        <source src="https://files.catbox.moe/knfqfc.mp4" type="video/mp4">
+    </video>
+</div>
+
+
+    <!-- Main Content -->
+    <div class="content-layer">
+
+        <!-- Logo -->
+        <div class="logo-container">
+            <div class="logo-ring"></div>
+            <img id="logoImage" src="https://files.catbox.moe/notv6r.jpg" alt="Logo" class="rotating-logo" title="اضغط للتأثير الصوتي">
+        </div>
+
+        <!-- Title -->
+        <h1 class="main-title">『 ÄḶ.ḊЁḶṚ 』</h1>
+        <p class="subtitle">Creative Frontend Developer</p>
+
+        <!-- Tab Radios -->
+        <input type="radio" name="tab" id="tab1" checked>
+        <input type="radio" name="tab" id="tab2">
+        <input type="radio" name="tab" id="tab3">
+
+        <!-- Tab Buttons -->
+        <div class="tabs-container">
+            <label for="tab1" class="tab-label">✨ من يكون 『 ÄḶ.ḊЁḶṚ 』</label>
+            <label for="tab2" class="tab-label">💪 مهارات 『 ÄḶ.ḊЁḶṚ 』 يا حتة</label>
+            <label for="tab3" class="tab-label">❤️ تواصل مع 『 ÄḶ.ḊЁḶṚ 』يا حته  </label>
+        </div>
+
+        <!-- Sections -->
+        <div class="sections-area">
+            <div class="section" id="section1">
+<div class="typewriter-text" id="typewriterTarget">
+    🚀 <span class="en">Developing Future Experiences</span><br>
+    أبني مواقع وتطبيقات ويب متكاملة بواجهات Modern، تفاعلية، وسريعة البرق ⚡.<br>
+    أحوّل الأفكار إلى تجارب رقمية حية تنبض بالإبداع 🎨.<br>
+    شغوف بـ Clean Code والتصميم الجذاب..<br>
+    أؤمن أن كل مشروع هو قصة تروى بلغات:<br>
+    🌐 HTML | CSS | JavaScript<br><br>
+    وٌلَسِهّ جّآيَآ حًآجّآتٌ تٌآنِيَ کْتٌيَر بًعٌوٌنِ آلَلَه ثًمً دٍعٌمًکْ يَ شُقُيَقُ 💖🫂
+</div>
+
+            </div>
+
+            <div class="section" id="section2">
+                <ul class="skills-list">
+                    <li>🎨 تطوير واجهات المواقع (UI Development)</li>
+                    <li>📱 تصميم مواقع متجاوبة (Responsive Design)</li>
+                    <li>⚡ بناء تطبيقات ويب تفاعلية كاملة</li>
+                    <li>🧩 HTML5 | CSS3 | JavaScript</li>
+                    <li>🐍 Python (قريباً)</li>
+                    <li>🔧 GitHub | Speak Editor</li>
+                </ul>
+            </div>
+
+            <div class="section" id="section3">
+                <div class="contact-links">
+                    <a href="https://wa.me/+201557326736?text=ازيك+يا+『 ÄḶ.ḊЁḶṚ 』+عايز+أسال+على +الـــ+CV" target="_blank" class="contact-link">
+                        <span class="contact-icon">💬</span>تٌوٌصّلَ مًعٌ 『 ÄḶ.ḊЁḶṚ 』وٌتٌسِآبً 
+                    </a>
+                    <a href="https://t.me/al_delr_2" target="_blank" class="contact-link">
+                        <span class="contact-icon">📩</span> تٌوٌآصّلَ مًعٌ 『 ÄḶ.ḊЁḶṚ 』تٌيَلَيَجّرآمً 
+                    
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== Skills Accordion Card ====== -->
+        <div class="skills-card">
+            <h3>⚡ مهاراتي — اضغط للتفاصيل</h3>
+
+            <!-- Item 1 -->
+            <div class="acc-item">
+                <input type="checkbox" id="acc1" class="acc-cb">
+                <label for="acc1" class="acc-label">
+                    🎨 تطوير واجهات المواقع (UI Dev)
+                    <span class="arrow">▼</span>
+                </label>
+                <div class="acc-body">
+                    بصمم واجهات احترافية وجذابة من الصفر باستخدام HTML, CSS وانيميشن خالص. كل تفصيلة بفكر فيها.
+                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 90%"></div></div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="acc-item">
+                <input type="checkbox" id="acc2" class="acc-cb">
+                <label for="acc2" class="acc-label">
+                    📱 Responsive Design
+                    <span class="arrow">▼</span>
+                </label>
+                <div class="acc-body">
+                    الموقع بيشتغل تمام على موبايل، تابلت، وكمبيوتر بدون أي مشاكل. Media Queries محترفة.
+                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 85%"></div></div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="acc-item">
+                <input type="checkbox" id="acc3" class="acc-cb">
+                <label for="acc3" class="acc-label">
+                    ⚡ JavaScript تفاعلي
+                    <span class="arrow">▼</span>
+                </label>
+                <div class="acc-body">
+                    Canvas, Animations, Events, DOM Manipulation كلها في خدمة تجربة المستخدم.
+                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 78%"></div></div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="acc-item">
+                <input type="checkbox" id="acc4" class="acc-cb">
+                <label for="acc4" class="acc-label">
+                    🧩 HTML5 | CSS3 خالص
+                    <span class="arrow">▼</span>
+                </label>
+                <div class="acc-body">
+                    CSS Checkbox Hack, Grid, Flexbox, Custom Properties. بدون Frameworks عشان الكود يبقى نظيف وسريع.
+                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 95%"></div></div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="acc-item">
+                <input type="checkbox" id="acc5" class="acc-cb">
+                <label for="acc5" class="acc-label">
+                    🐍 Python (قريباً)
+                    <span class="arrow">▼</span>
+                </label>
+                <div class="acc-body">
+                    بتعلم Python عشان أوسع مجالي للـ Backend والأتمتة. مستمر في التطور.
+                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 30%"></div></div>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="acc-item">
+                <input type="checkbox" id="acc6" class="acc-cb">
+                <label for="acc6" class="acc-label">
+                    🔧 GitHub | أدوات التطوير
+                    <span class="arrow">▼</span>
+                </label>
+                <div class="acc-body">
+                    بستخدم GitHub للـ Version Control وإدارة المشاريع. اللي بعمله بيتوثق ويتنظم.
+                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 70%"></div></div>
+                </div>
+            </div>
+
+        </div>
+        <!-- ====== End Skills Accordion Card ====== -->
+
+        <!-- Footer -->
+        <div class="footer">
+ جّمًيَعٌ آلَحًقُوٌقُ مًحًفُوٌظُهّ لَلَـ
+ <span>『 ÄḶ.ḊЁḶṚ 』</span>
+ 2026©
+ <br>
+ <span style="color: gold;">وٌلَوٌ وٌصّلَهّ لَحًدٍ هّنِآ فُآ <span>『 ÄḶ.ḊЁḶṚ 』</span>بًيَحًبًکْکْ🫦😍</span>
+        </div>
+
+    </div>
+
+    <!-- ==================== JavaScript ==================== -->
+    <script>
+    
+    // ========== 1. Cursor ==========
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    document.addEventListener('mousemove', e => {
+        dot.style.left  = e.clientX + 'px';
+        dot.style.top   = e.clientY + 'px';
+        ring.style.left = e.clientX + 'px';
+        ring.style.top  = e.clientY + 'px';
+    });
+
+    // ========== 2. Particle Trail ==========
+    const colors = ['#27ae60','#2ecc71','#c0392b','#e74c3c','#ffffff'];
+    document.addEventListener('mousemove', e => {
+        const p = document.createElement('div');
+        p.className = 'trail-particle';
+        const c = colors[Math.floor(Math.random() * colors.length)];
+        p.style.cssText = `
+            left:${e.clientX - 3}px;
+            top:${e.clientY - 3}px;
+            background:${c};
+            box-shadow:0 0 6px ${c};
+        `;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 620);
+    });
+
+    // ========== 3. Background Sound (متكرر - يشتغل تلقائياً) ==========
+    const backgroundSoundSrc = "https://files.catbox.moe/ibid9i.mp3";
+    let bgAudio = new Audio(backgroundSoundSrc);
+    bgAudio.loop = true;
+    bgAudio.volume = 0.25;
+
+    // محاولة تشغيل الصوت تلقائياً
+    bgAudio.play().then(() => {
+        console.log('✅ الصوت الخلفي اشتغل تلقائياً');
+    }).catch(() => {
+        console.log('⏳ المتصفح منع التشغيل التلقائي - هنشغل الصوت عند أول تفاعل');
+        // لو المتصفح منع التشغيل التلقائي، هنشغله عند أول نقرة أو لمس
+        document.addEventListener('click', function startAudio() {
+            bgAudio.play();
+            document.removeEventListener('click', startAudio);
+        }, { once: true });
+    });
+
+    // ========== 4. Logo Click Sound (لا يتكرر - مرة واحدة فقط) ==========
+    const clickSoundSrc = "https://files.catbox.moe/nu5r0f.aac";
+    document.getElementById('logoImage').addEventListener('click', e => {
+        e.stopPropagation(); // منع انتشار الحدث عشان ميتعارضش مع صوت الخلفية
+        const a = new Audio(clickSoundSrc);
+        a.volume = 0.7;
+        a.play(); // This is a one-shot sound, not looped - won't repeat
+    });
+
+    // ========== 5. Typewriter Effect ==========
+    function typewriter(el, speed = 38) {
+        const text = el.dataset.text || el.textContent;
+        el.dataset.text = text;
+        el.textContent  = '';
+        let i = 0;
+        (function type() {
+            if (i < text.length) {
+                el.textContent += text[i++];
+                setTimeout(type, speed);
+            }
+        })();
+    }
+
+    const twTarget = document.getElementById('typewriterTarget');
+    twTarget.dataset.text = twTarget.textContent;
+
+    document.getElementById('tab1').addEventListener('change', () => {
+        setTimeout(() => typewriter(twTarget), 120);
+    });
+    // Run once on load since tab1 is checked
+    setTimeout(() => typewriter(twTarget), 400);
+
+    </script>
+</body>
+</html>
