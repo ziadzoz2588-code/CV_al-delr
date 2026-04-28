@@ -1,4 +1,4 @@
-Enter<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -6,30 +6,28 @@ Enter<!DOCTYPE html>
     <title>『 ÄḶ.ḊЁḶṚ 』- Creative Frontend Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Amiri:wght@400;700&family=Orbitron:wght@400;700;900&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== CSS Variables ========== */
         :root {
-            --red: #c0392b;
-            --red-glow: #e74c3c;
-            --green: #27ae60;
-            --green-glow: #2ecc71;
-            --bg: #0a0a0a;
-            --bg2: #111114;
-            --glass: rgba(255,255,255,0.04);
-            --glass-border: rgba(255,255,255,0.08);
-            --text: #e0e0e0;
-            --muted: #888;
+            --cyan: #00f5ff;
+            --cyan-dim: #00bcd4;
+            --green: #00ff88;
+            --green-dim: #00c868;
+            --red: #ff2244;
+            --red-dim: #c0392b;
+            --gold: #ffd700;
+            --bg: #050508;
+            --bg2: #08080f;
+            --glass: rgba(0,245,255,0.04);
+            --glass-border: rgba(0,245,255,0.12);
+            --text: #d0e8f0;
+            --muted: #557788;
         }
 
-        /* ========== Reset ========== */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ========== Body ========== */
+        html { scroll-behavior: smooth; }
+
         body {
             background-color: var(--bg);
             color: var(--text);
@@ -43,153 +41,165 @@ Enter<!DOCTYPE html>
             cursor: none;
         }
 
-        /* ========== Custom Cursor ========== */
+        /* ===== Custom Cursor ===== */
         #cursor-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--green-glow);
+            width: 8px; height: 8px;
+            background: var(--cyan);
             border-radius: 50%;
-            position: fixed;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 9999;
-            box-shadow: 0 0 12px var(--green-glow), 0 0 25px var(--green);
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9999;
+            box-shadow: 0 0 14px var(--cyan), 0 0 30px var(--cyan-dim);
             transform: translate(-50%, -50%);
-            transition: transform 0.05s;
         }
         #cursor-ring {
-            width: 36px;
-            height: 36px;
-            border: 1.5px solid rgba(39,174,96,0.5);
+            width: 38px; height: 38px;
+            border: 1.5px solid rgba(0,245,255,0.4);
             border-radius: 50%;
-            position: fixed;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 9998;
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9998;
             transform: translate(-50%, -50%);
-            transition: left 0.12s ease, top 0.12s ease, width 0.2s, height 0.2s, border-color 0.2s;
-        }
-        body:hover #cursor-ring { border-color: rgba(192,57,43,0.6); }
-
-        /* ========== Particle Trail ========== */
-        .trail-particle {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9990;
-            animation: fadeTrail 0.6s forwards;
-        }
-        @keyframes fadeTrail {
-            0%   { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0); }
+            transition: left 0.1s ease, top 0.1s ease;
         }
 
-        /* ========== Canvas Background ========== */
+        /* ===== Video Background ===== */
         .video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1; /* عشان يفضل ورا المحتوى */
-    overflow: hidden;
-}
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1; overflow: hidden;
+        }
+        .video-background video {
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        .video-background::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: rgba(2, 4, 16, 0.72);
+        }
 
-.video-background video {
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-}
+        /* ===== Matrix Rain Canvas ===== */
+        #matrixCanvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 2;
+            opacity: 0.07;
+            pointer-events: none;
+        }
 
-/* طبقة تعتيم عشان الكلام يبان */
-.video-background::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5); 
-}
- 
+        /* ===== Scan Line Overlay ===== */
+        .scanlines {
+            position: fixed; inset: 0; z-index: 3;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 245, 255, 0.015) 2px,
+                rgba(0, 245, 255, 0.015) 4px
+            );
+        }
 
-        /* ========== Content Layer ========== */
+        /* ===== Content Layer ===== */
         .content-layer {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 720px;
+            position: relative; z-index: 10;
+            width: 100%; max-width: 760px;
             padding: 30px 20px 10px;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             align-items: center;
         }
 
-        /* ========== Logo ========== */
+        /* ===== Logo ===== */
         .logo-container {
-            margin-top: 20px;
-            margin-bottom: 18px;
-            position: relative;
+            margin-top: 28px; margin-bottom: 20px;
+            position: relative; display: flex;
+            align-items: center; justify-content: center;
         }
-
         .logo-ring {
-            position: absolute;
-            inset: -14px;
+            position: absolute; inset: -18px;
             border-radius: 50%;
-            border: 2px dashed rgba(39,174,96,0.3);
-            animation: spinReverse 12s linear infinite;
+            border: 1.5px dashed rgba(0,245,255,0.25);
+            animation: spinSlow 14s linear infinite;
         }
-        @keyframes spinReverse {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(-360deg); }
-        }
-
-        .rotating-logo {
-            width: 170px;
-            height: 170px;
+        .logo-ring2 {
+            position: absolute; inset: -10px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--green);
-            box-shadow: 0 0 25px var(--green), 0 0 12px var(--red);
-            animation: spin 10s linear infinite, floatLogo 4s ease-in-out infinite;
-            cursor: pointer;
-            display: block;
-            position: relative;
-            z-index: 2;
+            border: 1px dashed rgba(0,255,136,0.2);
+            animation: spinSlow 9s linear infinite reverse;
         }
-
-        @keyframes spin {
+        @keyframes spinSlow {
             from { transform: rotate(0deg); }
             to   { transform: rotate(360deg); }
         }
+
+        .logo-img {
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--cyan);
+            box-shadow: 0 0 30px var(--cyan), 0 0 60px rgba(0,245,255,0.2), inset 0 0 20px rgba(0,245,255,0.1);
+            animation: floatLogo 4s ease-in-out infinite;
+            cursor: pointer;
+            position: relative; z-index: 2;
+            display: block;
+        }
         @keyframes floatLogo {
-            0%, 100% { box-shadow: 0 0 25px var(--green), 0 0 12px var(--red); margin-top: 0px; }
-            50%       { box-shadow: 0 0 50px var(--green-glow), 0 0 28px var(--red-glow); margin-top: -8px; }
+            0%,100% { transform: translateY(0px); box-shadow: 0 0 30px var(--cyan), 0 0 60px rgba(0,245,255,0.2); }
+            50%      { transform: translateY(-10px); box-shadow: 0 0 50px var(--cyan), 0 0 90px rgba(0,245,255,0.35); }
         }
 
-        .rotating-logo:active {
-            filter: hue-rotate(90deg) brightness(1.3);
+        /* ===== Corner Brackets for Logo ===== */
+        .logo-frame {
+            position: absolute; width: 200px; height: 200px;
+            z-index: 1;
         }
+        .logo-frame::before, .logo-frame::after,
+        .logo-frame span::before, .logo-frame span::after {
+            content: '';
+            position: absolute;
+            width: 20px; height: 20px;
+            border-color: var(--red);
+            border-style: solid;
+        }
+        .logo-frame::before { top: 0; right: 0; border-width: 2px 2px 0 0; }
+        .logo-frame::after  { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+        .logo-frame span::before { top: 0; left: 0; border-width: 2px 0 0 2px; }
+        .logo-frame span::after  { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
 
-        /* ========== Title ========== */
-        .main-title {
+        /* ===== Shield Badge ===== */
+        .shield-badge {
+            position: absolute;
+            bottom: -6px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff2244, #c0392b);
+            color: #fff;
+            font-size: 0.65rem;
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 1.5px;
+            box-shadow: 0 0 12px var(--red);
+            z-index: 5;
+            white-space: nowrap;
+        }
+
+        /* ===== Title ===== */
+        .main-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.4rem;
             font-weight: 900;
-            background: linear-gradient(90deg, var(--green-glow), #fff, var(--red-glow), var(--green-glow));
+            background: linear-gradient(90deg, var(--cyan), var(--gold), var(--green), var(--cyan));
             background-size: 300% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: gradientShift 5s ease infinite;
-            margin: 12px 0 6px;
-            letter-spacing: 2px;
+            margin: 18px 0 6px;
+            letter-spacing: 3px;
             text-align: center;
+            text-shadow: none;
+            filter: drop-shadow(0 0 12px rgba(0,245,255,0.5));
         }
         @keyframes gradientShift {
             0%   { background-position: 0% 50%; }
@@ -198,254 +208,322 @@ Enter<!DOCTYPE html>
         }
 
         .subtitle {
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.05rem;
-            color: var(--green-glow);
-            margin-bottom: 28px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--cyan-dim);
+            margin-bottom: 6px;
             text-align: center;
-            opacity: 0.85;
-            letter-spacing: 1px;
+            letter-spacing: 3px;
+            opacity: 0.9;
         }
 
-        /* ========== Tabs ========== */
+        .specialty-tags {
+            display: flex; flex-wrap: wrap;
+            justify-content: center; gap: 8px;
+            margin-bottom: 28px;
+        }
+        .tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.68rem;
+            padding: 5px 14px;
+            border-radius: 4px;
+            letter-spacing: 1.5px;
+            border: 1px solid;
+        }
+        .tag-cyan  { border-color: var(--cyan);  color: var(--cyan);  background: rgba(0,245,255,0.07); }
+        .tag-green { border-color: var(--green); color: var(--green); background: rgba(0,255,136,0.07); }
+        .tag-red   { border-color: var(--red);   color: var(--red);   background: rgba(255,34,68,0.07); }
+        .tag-gold  { border-color: var(--gold);  color: var(--gold);  background: rgba(255,215,0,0.07); }
+
+        /* ===== Tabs ===== */
         input[type="radio"] { display: none; }
 
         .tabs-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 28px;
+            display: flex; flex-wrap: wrap;
+            justify-content: center; gap: 10px;
+            margin-bottom: 26px;
         }
 
         .tab-label {
-            background: var(--glass);
-            border: 2px solid var(--red);
-            color: var(--text);
-            padding: 11px 22px;
-            border-radius: 30px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(0,245,255,0.3);
+            color: var(--muted);
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 700;
             font-family: 'Cairo', sans-serif;
             user-select: none;
             position: relative;
             overflow: hidden;
+            letter-spacing: 0.5px;
         }
-        .tab-label::after {
+        .tab-label::before {
             content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            position: absolute; inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(0,245,255,0.08), transparent);
             transform: translateX(-100%);
             transition: transform 0.5s;
         }
-        .tab-label:hover::after { transform: translateX(100%); }
+        .tab-label:hover::before { transform: translateX(100%); }
         .tab-label:hover {
-            background: var(--red);
-            color: #fff;
-            box-shadow: 0 0 22px var(--red);
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 18px rgba(0,245,255,0.2);
         }
 
-        /* Active tab highlight */
         #tab1:checked ~ .tabs-container label[for="tab1"],
         #tab2:checked ~ .tabs-container label[for="tab2"],
         #tab3:checked ~ .tabs-container label[for="tab3"] {
-            background: var(--green);
-            border-color: var(--green);
-            color: #000;
+            background: rgba(0,245,255,0.1);
+            border-color: var(--cyan);
+            color: var(--cyan);
             font-weight: 900;
-            box-shadow: 0 0 22px var(--green);
+            box-shadow: 0 0 22px rgba(0,245,255,0.3);
         }
 
-        /* ========== Sections ========== */
+        /* ===== Sections ===== */
         .sections-area { width: 100%; margin-bottom: 20px; }
 
         .section {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1),
-                        opacity 0.45s ease,
-                        transform 0.45s ease,
-                        padding 0.4s;
+            max-height: 0; overflow: hidden;
+            opacity: 0; transform: translateY(14px);
+            transition: max-height 0.6s cubic-bezier(0.4,0,0.2,1),
+                        opacity 0.45s ease, transform 0.45s ease, padding 0.4s;
             background: var(--glass);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            border-right: 4px solid var(--green);
-            border-radius: 16px;
-            padding: 0 20px;
-            margin-bottom: 10px;
-            color: #ccc;
+            border-right: 3px solid var(--cyan);
+            border-radius: 8px;
+            padding: 0 22px;
+            color: #aac8d8;
         }
 
         #tab1:checked ~ .sections-area #section1,
         #tab2:checked ~ .sections-area #section2,
         #tab3:checked ~ .sections-area #section3 {
-            max-height: 700px;
+            max-height: 800px;
             opacity: 1;
             transform: translateY(0);
-            padding: 22px;
+            padding: 24px;
             margin-bottom: 20px;
         }
 
-        /* ========== Section 1: About ========== 
-        .typewriter-text {
-            font-size: 1.1rem;
+        /* About text */
+        .about-text {
+            font-size: 1rem;
             line-height: 2;
-            color: #ddd;
+            color: #c0d8e4;
             font-family: 'Cairo', sans-serif;
+            text-align: right;
+            direction: rtl;
+            white-space: pre-line;
+        }
+        .about-text .en {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyan);
+            direction: ltr;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+        .about-text .highlight {
+            color: var(--gold);
+            font-weight: 700;
         }
 
-         ========== Section 2: Skills ==========*/
-        .skills-list {
-            list-style: none;
-            padding: 0;
-        }
-        .skills-list li {
-            padding: 11px 16px;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.025);
-            border: 1px solid var(--glass-border);
+        /* ===== السرسجه ===== */
+        .sarcasm-box {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: rgba(255,34,68,0.05);
+            border: 1px solid rgba(255,34,68,0.2);
             border-right: 3px solid var(--red);
             border-radius: 8px;
-            transition: 0.3s;
-            font-size: 1.05rem;
-            font-family: 'Cairo', sans-serif;
+            direction: rtl;
         }
-        .skills-list li:hover {
-            background: rgba(192,57,43,0.12);
-            border-right-color: var(--green);
-            transform: translateX(6px);
-            box-shadow: inset 0 0 15px rgba(39,174,96,0.05);
+        .sarcasm-box p {
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            color: #aab8c4;
+            line-height: 2;
+            margin-bottom: 6px;
+        }
+        .sarcasm-box p:last-child { margin-bottom: 0; }
+        .sarcasm-box .quote-mark {
+            color: var(--green);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
         }
 
-        /* ========== Section 3: Contact ========== */
-        .contact-links {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+        /* Skills list */
+        .skills-list { list-style: none; padding: 0; }
+        .skills-list li {
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: rgba(0,245,255,0.03);
+            border: 1px solid rgba(0,245,255,0.1);
+            border-right: 3px solid var(--red);
+            border-radius: 6px;
+            transition: 0.3s;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            color: #b0cdd8;
         }
+        .skills-list li:hover {
+            background: rgba(0,245,255,0.08);
+            border-right-color: var(--cyan);
+            transform: translateX(6px);
+            color: var(--text);
+        }
+
+        /* Contact links */
+        .contact-links { display: flex; flex-direction: column; gap: 14px; }
         .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px 18px;
+            display: flex; align-items: center; gap: 14px;
+            padding: 16px 20px;
             background: var(--glass);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--green);
-            border-radius: 12px;
+            border: 1px solid rgba(0,245,255,0.2);
+            border-radius: 8px;
             color: var(--text);
             text-decoration: none;
             transition: 0.3s;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-family: 'Cairo', sans-serif;
         }
         .contact-link:hover {
-            background: var(--green);
-            color: #000;
-            font-weight: 700;
-            box-shadow: 0 0 25px var(--green);
+            background: rgba(0,245,255,0.1);
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 25px rgba(0,245,255,0.2);
             transform: translateY(-2px);
         }
-        .contact-icon { font-size: 1.7rem; }
+        .contact-icon { font-size: 1.6rem; }
 
-        /* ========== Skills Accordion Card ========== */
+        /* ===== Divider ===== */
+        .cyber-divider {
+            width: 100%;
+            display: flex; align-items: center; gap: 12px;
+            margin: 24px 0;
+        }
+        .cyber-divider::before, .cyber-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+        }
+        .cyber-divider span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--cyan-dim);
+            letter-spacing: 3px;
+            white-space: nowrap;
+        }
+
+        /* ===== Skills Accordion Card ===== */
         .skills-card {
             width: 100%;
-            background: var(--glass);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--glass-border);
-            border-top: 2px solid var(--red);
-            border-radius: 18px;
-            padding: 24px;
-            margin: 18px 0;
-            box-shadow: 0 0 30px rgba(192,57,43,0.12), 0 8px 32px rgba(0,0,0,0.4);
+            border-top: 2px solid var(--cyan);
+            border-radius: 10px;
+            padding: 26px;
+            margin: 6px 0 24px;
+            box-shadow: 0 0 40px rgba(0,245,255,0.08), 0 8px 32px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
         }
-        .skills-card h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--green-glow);
-            margin-bottom: 18px;
-            text-align: center;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
+        .skills-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--green), var(--red), var(--cyan));
+            background-size: 300%;
+            animation: borderShift 4s linear infinite;
+        }
+        @keyframes borderShift {
+            0%   { background-position: 0%; }
+            100% { background-position: 300%; }
         }
 
-        /* Accordion Item */
+        .skills-card h3 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--cyan);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px var(--cyan);
+        }
+
+        /* Accordion */
         .acc-item { margin: 10px 0; }
         .acc-cb { display: none; }
 
         .acc-label {
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--glass-border);
-            border-right: 3px solid var(--red);
-            border-radius: 10px;
+            padding: 13px 18px;
+            background: rgba(0,245,255,0.03);
+            border: 1px solid rgba(0,245,255,0.1);
+            border-right: 3px solid var(--red-dim);
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 1.05rem;
+            font-size: 0.97rem;
             font-family: 'Cairo', sans-serif;
             font-weight: 600;
-            color: #ddd;
+            color: #99bbc8;
             transition: 0.3s;
             user-select: none;
         }
         .acc-label:hover {
-            background: rgba(192,57,43,0.1);
-            border-right-color: var(--green);
+            background: rgba(0,245,255,0.07);
+            border-right-color: var(--cyan);
             color: #fff;
         }
         .acc-label .arrow {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: transform 0.4s;
-            color: var(--green);
+            color: var(--cyan-dim);
         }
 
         .acc-body {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-6px);
+            max-height: 0; overflow: hidden;
+            opacity: 0; transform: translateY(-6px);
             transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1),
-                        opacity 0.35s ease,
-                        transform 0.35s ease,
-                        padding 0.35s;
-            background: rgba(39,174,96,0.04);
+                        opacity 0.35s ease, transform 0.35s ease, padding 0.35s;
+            background: rgba(0,245,255,0.03);
             border: 1px solid transparent;
-            border-radius: 0 0 10px 10px;
-            font-size: 0.97rem;
-            color: #bbb;
+            border-radius: 0 0 6px 6px;
+            font-size: 0.93rem;
+            color: #8aaabb;
             font-family: 'Cairo', sans-serif;
-            line-height: 1.8;
+            line-height: 1.85;
         }
 
-        /* Open state */
         .acc-cb:checked ~ .acc-label {
-            background: rgba(39,174,96,0.12);
-            border-right-color: var(--green);
+            background: rgba(0,245,255,0.09);
+            border-right-color: var(--cyan);
             color: #fff;
-            border-radius: 10px 10px 0 0;
+            border-radius: 6px 6px 0 0;
         }
         .acc-cb:checked ~ .acc-label .arrow {
             transform: rotate(180deg);
-            color: var(--red-glow);
+            color: var(--green);
         }
         .acc-cb:checked ~ .acc-body {
-            max-height: 200px;
-            opacity: 1;
+            max-height: 200px; opacity: 1;
             transform: translateY(0);
             padding: 14px 18px;
-            border-color: var(--glass-border);
+            border-color: rgba(0,245,255,0.1);
             border-top: none;
         }
 
-        /* Stagger animation on acc-items */
         .acc-item:nth-child(1) { animation: fadeUp 0.5s 0.05s both; }
         .acc-item:nth-child(2) { animation: fadeUp 0.5s 0.12s both; }
         .acc-item:nth-child(3) { animation: fadeUp 0.5s 0.19s both; }
@@ -457,119 +535,229 @@ Enter<!DOCTYPE html>
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========== Progress bar inside acc-body ========== */
         .skill-bar-wrap {
             background: rgba(255,255,255,0.06);
-            border-radius: 20px;
-            height: 7px;
-            margin-top: 10px;
-            overflow: hidden;
+            border-radius: 20px; height: 6px;
+            margin-top: 10px; overflow: hidden;
         }
         .skill-bar {
-            height: 100%;
-            border-radius: 20px;
-            background: linear-gradient(90deg, var(--green), var(--green-glow));
-            box-shadow: 0 0 8px var(--green);
+            height: 100%; border-radius: 20px;
+            background: linear-gradient(90deg, var(--cyan-dim), var(--cyan));
+            box-shadow: 0 0 8px var(--cyan);
             width: 0;
-            transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+            transition: width 1.3s cubic-bezier(0.4,0,0.2,1);
         }
         .acc-cb:checked ~ .acc-body .skill-bar { width: var(--pct); }
+        .skill-bar.red   { background: linear-gradient(90deg, var(--red-dim), var(--red)); box-shadow: 0 0 8px var(--red); }
+        .skill-bar.green { background: linear-gradient(90deg, var(--green-dim), var(--green)); box-shadow: 0 0 8px var(--green); }
+        .skill-bar.gold  { background: linear-gradient(90deg, #c8a000, var(--gold)); box-shadow: 0 0 8px var(--gold); }
 
-        /* ========== Footer ========== */
+        /* ===== CV / Terminal Card ===== */
+        .cv-card {
+            width: 100%;
+            background: #020810;
+            border: 1px solid rgba(0,245,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 0 40px rgba(0,245,255,0.07);
+        }
+        .cv-card-header {
+            background: rgba(0,245,255,0.08);
+            padding: 10px 18px;
+            display: flex; align-items: center; gap: 8px;
+            border-bottom: 1px solid rgba(0,245,255,0.15);
+        }
+        .dot-r { width: 10px; height: 10px; border-radius: 50%; background: var(--red); }
+        .dot-y { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); }
+        .dot-g { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+        .cv-card-header span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.68rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            margin-right: auto;
+        }
+        .cv-card-body {
+            padding: 22px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            color: #4af;
+            direction: ltr;
+            line-height: 2;
+        }
+        .cv-card-body .prompt { color: var(--green); }
+        .cv-card-body .cmd    { color: #fff; }
+        .cv-card-body .val    { color: var(--gold); }
+        .cv-card-body .cmt    { color: #446655; }
+        .cv-card-body .lbl    { color: var(--cyan); }
+        .cv-card-body .err    { color: var(--red); }
+        .cv-card-body .note   {
+            color: #7a9aaa;
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            display: block;
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-right: 2px solid var(--gold);
+            background: rgba(255,215,0,0.04);
+            border-radius: 4px;
+        }
+
+        /* ===== Footer ===== */
         .footer {
             width: 100%;
             text-align: center;
-            padding: 20px;
+            padding: 22px 20px;
             color: var(--muted);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-family: 'Cairo', sans-serif;
-            border-top: 1px solid var(--glass-border);
-            margin-top: 18px;
-            position: relative;
-            z-index: 10;
+            border-top: 1px solid rgba(0,245,255,0.1);
+            margin-top: 10px;
+            position: relative; z-index: 10;
         }
-        .footer span { color: var(--green-glow); font-weight: bold; }
+        .footer .brand {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+        .footer .love { color: var(--gold); }
 
-        /* ========== Mobile ========== */
+        /* ===== Mobile ===== */
         @media (max-width: 600px) {
-            .main-title { font-size: 1.7rem; }
-            .rotating-logo { width: 130px; height: 130px; }
-            .tab-label { padding: 10px 16px; font-size: 0.88rem; }
+            .main-title { font-size: 1.6rem; letter-spacing: 1px; }
+            .logo-img { width: 130px; height: 130px; }
+            .logo-frame { width: 170px; height: 170px; }
+            .tab-label { padding: 9px 14px; font-size: 0.82rem; }
+            .skills-card { padding: 18px; }
+            .cv-card-body { font-size: 0.78rem; }
+            .stat-num { font-size: 1.3rem; }
         }
         
-        
-        
-        .typewriter-text {
-    font-size: 1rem;
-    line-height: 1.8; /* لزيادة المسافة بين السطور ومنع تداخلها */
-    color: #ddd;
-    font-family: 'Cairo', sans-serif;
-    text-align: right; /* المحاذاة لليمين لأنك كاتب بالعربي */
-    direction: rtl;    /* تحديد اتجاه الكتابة من اليمين لليسار */
-    white-space: pre-line; /* عشان يحترم المسافات والنزول لسطر جديد اللي أنت عملته */
-    padding: 10px;
-}
+        /* ===== Neon Box Fix ===== */
+        .neon-box {
+            position: relative;
+            width: 250px;
+            height: 200px;
+            background-color: #111; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); 
+        }
 
-/* لو عايز الكلمات الإنجليزية تظهر بشكل أفضل وسط العربي */
-.typewriter-text span.en {
-    font-family: 'Orbitron', sans-serif;
-    direction: ltr;
-    display: inline-block;
-    color: var(--green-glow);
-}
- 
+        .neon-box::before {
+            content: '';
+            position: absolute;
+            width: 250%;
+            height: 500%;
+            background: conic-gradient(transparent, transparent, transparent, #0ff);
+            animation: rotate 3s linear infinite;
+        }
+
+        .neon-box::after {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            background: #111;
+            border-radius: 8px;
+        }
+
+        .neon-box .text {
+            position: relative;
+            z-index: 5;
+            color: #0ff;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #0ff;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
     <div class="video-background">
-    <video autoplay muted loop playsinline>
-        <source src="https://files.catbox.moe/knfqfc.mp4" type="video/mp4">
-    </video>
-</div>
+        <video autoplay muted loop playsinline>
+            <source src="https://files.catbox.moe/knfqfc.mp4" type="video/mp4">
+        </video>
+    </div>
 
+    <canvas id="matrixCanvas"></canvas>
+    <div class="scanlines"></div>
 
-    <!-- Main Content -->
     <div class="content-layer">
 
         <!-- Logo -->
         <div class="logo-container">
             <div class="logo-ring"></div>
-            <img id="logoImage" src="https://files.catbox.moe/notv6r.jpg" alt="Logo" class="rotating-logo" title="اضغط للتأثير الصوتي">
+            <div class="logo-ring2"></div>
+            <div class="logo-frame"><span></span></div>
+            <img id="logoImage"
+                src="https://files.catbox.moe/notv6r.jpg"
+                alt="Logo"
+                class="logo-img"
+                title="اضغط للتأثير الصوتي">
+            <div class="shield-badge">CREATIVE DEV</div>
         </div>
 
         <!-- Title -->
         <h1 class="main-title">『 ÄḶ.ḊЁḶṚ 』</h1>
         <p class="subtitle">Creative Frontend Developer</p>
 
-        <!-- Tab Radios -->
+        <!-- Tags -->
+        <div class="specialty-tags">
+            <span class="tag tag-cyan">🎨 UI DEVELOPMENT</span>
+            <span class="tag tag-green">💻 FRONTEND</span>
+            <span class="tag tag-gold">⚡ JAVASCRIPT</span>
+            <span class="tag tag-red">🔥 CREATIVE</span>
+        </div>
+
+        <!-- Tabs -->
         <input type="radio" name="tab" id="tab1" checked>
         <input type="radio" name="tab" id="tab2">
         <input type="radio" name="tab" id="tab3">
 
-        <!-- Tab Buttons -->
         <div class="tabs-container">
             <label for="tab1" class="tab-label">✨ من يكون 『 ÄḶ.ḊЁḶṚ 』</label>
             <label for="tab2" class="tab-label">💪 مهارات 『 ÄḶ.ḊЁḶṚ 』 يا حتة</label>
-            <label for="tab3" class="tab-label">❤️ تواصل مع 『 ÄḶ.ḊЁḶṚ 』يا حته  </label>
+            <label for="tab3" class="tab-label">❤️ تواصل مع 『 ÄḶ.ḊЁḶṚ 』 يا حته</label>
         </div>
 
-        <!-- Sections -->
         <div class="sections-area">
+            <!-- Section 1: About -->
             <div class="section" id="section1">
-<div class="typewriter-text" id="typewriterTarget">
-    🚀 <span class="en">Developing Future Experiences</span><br>
-    أبني مواقع وتطبيقات ويب متكاملة بواجهات Modern، تفاعلية، وسريعة البرق ⚡.<br>
-    أحوّل الأفكار إلى تجارب رقمية حية تنبض بالإبداع 🎨.<br>
-    شغوف بـ Clean Code والتصميم الجذاب..<br>
-    أؤمن أن كل مشروع هو قصة تروى بلغات:<br>
-    🌐 HTML | CSS | JavaScript<br><br>
-    وٌلَسِهّ جّآيَآ حًآجّآتٌ تٌآنِيَ کْتٌيَر بًعٌوٌنِ آلَلَه ثًمً دٍعٌمًکْ يَ شُقُيَقُ 💖🫂
-</div>
+                <div class="about-text" id="typewriterTarget">
+🚀 <span class="en">Developing Future Experiences</span>
+أبني مواقع وتطبيقات ويب متكاملة بواجهات Modern، تفاعلية، وسريعة البرق ⚡.
+أحوّل الأفكار إلى تجارب رقمية حية تنبض بالإبداع 🎨.
+شغوف بـ Clean Code والتصميم الجذاب..
+أؤمن أن كل مشروع هو قصة تروى بلغات:
+🌐 HTML | CSS | JavaScript
 
+وٌلَسِهّ جّآيَآ حًآجّآتٌ تٌآنِيَ کْتٌيَر بًعٌوٌنِ آلَلَه ثًمً دٍعٌمًکْ يَ شُقُيَقُ 💖🫂
+                </div>
+
+                <!-- السرسجه -->
+                <div class="sarcasm-box">
+                    <p><span class="quote-mark">// </span>الـ Password بتاعنا <span style="color:var(--red);">'ثقة'</span>، والـ Encryption بتاعنا <span style="color:var(--green);">'رجولة'</span> 🔐</p>
+                    <p><span class="quote-mark">// </span>اتجيش تعمل فيها Admin وأنت أصلاً <span style="color:var(--red);">User غلبان</span> 😤</p>
+                    <p><span class="quote-mark">// </span>الـ Ping عندنا عالي، والقدر غالي 📡🔥</p>
+                </div>
             </div>
 
+            <!-- Section 2: Skills -->
             <div class="section" id="section2">
                 <ul class="skills-list">
                     <li>🎨 تطوير واجهات المواقع (UI Development)</li>
@@ -581,24 +769,27 @@ Enter<!DOCTYPE html>
                 </ul>
             </div>
 
+            <!-- Section 3: Contact -->
             <div class="section" id="section3">
                 <div class="contact-links">
-                    <a href="https://wa.me/+201557326736?text=ازيك+يا+『 ÄḶ.ḊЁḶṚ 』+عايز+أسال+على +الـــ+CV" target="_blank" class="contact-link">
-                        <span class="contact-icon">💬</span>تٌوٌصّلَ مًعٌ 『 ÄḶ.ḊЁḶṚ 』وٌتٌسِآبً 
+                    <a href="https://wa.me/+201557326736?text=ازيك+يا+『 ÄḶ.ḊЁḶṚ 』+عايز+أسال+على+الـــ+CV" target="_blank" class="contact-link">
+                        <span class="contact-icon">💬</span>تٌوٌصّلَ مًعٌ 『 ÄḶ.ḊЁḶṚ 』وٌتٌسِآبً
                     </a>
                     <a href="https://t.me/al_delr_2" target="_blank" class="contact-link">
-                        <span class="contact-icon">📩</span> تٌوٌآصّلَ مًعٌ 『 ÄḶ.ḊЁḶṚ 』تٌيَلَيَجّرآمً 
-                    
+                        <span class="contact-icon">📩</span>تٌوٌآصّلَ مًعٌ 『 ÄḶ.ḊЁḶṚ 』تٌيَلَيَجّرآمً
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- ====== Skills Accordion Card ====== -->
+        <!-- Skills Accordion Card -->
+        <div class="cyber-divider">
+            <span>⚡ SKILL MATRIX ⚡</span>
+        </div>
+
         <div class="skills-card">
             <h3>⚡ مهاراتي — اضغط للتفاصيل</h3>
 
-            <!-- Item 1 -->
             <div class="acc-item">
                 <input type="checkbox" id="acc1" class="acc-cb">
                 <label for="acc1" class="acc-label">
@@ -611,7 +802,6 @@ Enter<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Item 2 -->
             <div class="acc-item">
                 <input type="checkbox" id="acc2" class="acc-cb">
                 <label for="acc2" class="acc-label">
@@ -620,11 +810,10 @@ Enter<!DOCTYPE html>
                 </label>
                 <div class="acc-body">
                     الموقع بيشتغل تمام على موبايل، تابلت، وكمبيوتر بدون أي مشاكل. Media Queries محترفة.
-                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 85%"></div></div>
+                    <div class="skill-bar-wrap"><div class="skill-bar green" style="--pct: 85%"></div></div>
                 </div>
             </div>
 
-            <!-- Item 3 -->
             <div class="acc-item">
                 <input type="checkbox" id="acc3" class="acc-cb">
                 <label for="acc3" class="acc-label">
@@ -633,11 +822,10 @@ Enter<!DOCTYPE html>
                 </label>
                 <div class="acc-body">
                     Canvas, Animations, Events, DOM Manipulation كلها في خدمة تجربة المستخدم.
-                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 78%"></div></div>
+                    <div class="skill-bar-wrap"><div class="skill-bar gold" style="--pct: 78%"></div></div>
                 </div>
             </div>
 
-            <!-- Item 4 -->
             <div class="acc-item">
                 <input type="checkbox" id="acc4" class="acc-cb">
                 <label for="acc4" class="acc-label">
@@ -650,7 +838,6 @@ Enter<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Item 5 -->
             <div class="acc-item">
                 <input type="checkbox" id="acc5" class="acc-cb">
                 <label for="acc5" class="acc-label">
@@ -659,11 +846,10 @@ Enter<!DOCTYPE html>
                 </label>
                 <div class="acc-body">
                     بتعلم Python عشان أوسع مجالي للـ Backend والأتمتة. مستمر في التطور.
-                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 30%"></div></div>
+                    <div class="skill-bar-wrap"><div class="skill-bar green" style="--pct: 30%"></div></div>
                 </div>
             </div>
 
-            <!-- Item 6 -->
             <div class="acc-item">
                 <input type="checkbox" id="acc6" class="acc-cb">
                 <label for="acc6" class="acc-label">
@@ -672,28 +858,54 @@ Enter<!DOCTYPE html>
                 </label>
                 <div class="acc-body">
                     بستخدم GitHub للـ Version Control وإدارة المشاريع. اللي بعمله بيتوثق ويتنظم.
-                    <div class="skill-bar-wrap"><div class="skill-bar" style="--pct: 70%"></div></div>
+                    <div class="skill-bar-wrap"><div class="skill-bar gold" style="--pct: 70%"></div></div>
                 </div>
             </div>
-
         </div>
-        <!-- ====== End Skills Accordion Card ====== -->
 
+        <!-- CV Terminal Card -->
+        <div class="cyber-divider">
+            <span>📄 CV CARD</span>
+        </div>
+
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <div class="dot-r"></div>
+                <div class="dot-y"></div>
+                <div class="dot-g"></div>
+                <span>ALDLER@terminal ~ cv</span>
+            </div>
+            <div class="cv-card-body">
+<span class="prompt">user@ALDLER:~$</span> <span class="cmd">cat cv.txt</span><br>
+<br>
+<span class="lbl">[ NAME ]</span>        <span class="val">『 ÄḶ.ḊЁḶṚ 』</span><br>
+<span class="lbl">[ ROLE ]</span>        <span class="val">Creative Frontend Developer</span><br>
+<span class="lbl">[ STACK ]</span>       <span class="val">HTML5 · CSS3 · JavaScript · Python</span><br>
+<span class="lbl">[ STATUS ]</span>      <span class="val">🟢 متاح للمشاريع</span><br>
+<span class="lbl">[ CONTACT ]</span>     <span class="val">WhatsApp · Telegram</span><br>
+<br>
+<span class="cmt"># ─────────────────────────────────────────</span><br>
+<span class="cmt"># رسالتي: أحوّل كل فكرة لكود يشتغل، وكل كود لتجربة بتفرق.</span><br>
+<span class="cmt"># شغوف بالـ Clean Code والتصميم الجذاب.</span><br>
+<span class="cmt"># ─────────────────────────────────────────</span><br>
+<br>
+<span class="prompt">user@ALDLER:~$</span> <span class="cmd">echo <span class="val">"الكود مستمر والقادم أقوى 🚀"</span></span><br>
+<span class="note">✍️ كل المشاريع بتتعمل بحب وتفاني. ولسه جاي حاجات كتير بعون الله ثم بدعمكم يا شقيق 💖🫂</span>
+            </div>
+        </div>
+        
+        <div class="neon-box"><span class="text">لَيَآ صّآحًبً کْدٍآ......<br>دٍآ مًشُ صّآحًبً <br>دٍآ آخِوٌيَآ  آسِمًهّ لَوٌردٍ آلَتٌآريَخِ 💗🫂<br>حًتٌهّ مًنِيَ <br>هّوٌهّ صّآيَعٌ 🤣<br> بًسِ آجّدٍعٌ حًدٍ تٌقُآبًلَهّ🫂💪<br>بًسِ لَوٌ آدٍآيَقُ مًًنِکْ هّتٌزٍعٌلَ 😖😂.<br>مًعٌلَشُ دٍآ مًشُ بًيَسِمًيَ عٌلَﮯ حًدٍ 🌚🌺</span> </div>
         <!-- Footer -->
+        
         <div class="footer">
- جّمًيَعٌ آلَحًقُوٌقُ مًحًفُوٌظُهّ لَلَـ
- <span>『 ÄḶ.ḊЁḶṚ 』</span>
- 2026©
- <br>
- <span style="color: gold;">وٌلَوٌ وٌصّلَهّ لَحًدٍ هّنِآ فُآ <span>『 ÄḶ.ḊЁḶṚ 』</span>بًيَحًبًکْکْ🫦😍</span>
+            جّمًيَعٌ آلَحًقُوٌقُ مًحًفُوٌظُهّ لَلَـ <span class="brand">『 ÄḶ.ḊЁḶṚ 』</span> © 2026<br>
+            <span class="love">وٌلَوٌ وٌصّلَهّ لَحًدٍ هّنِآ فُآ 『 ÄḶ.ḊЁḶṚ 』 بًيَحًبًکْکْ 🫦😍</span>
         </div>
 
-    </div>
+    </div><!-- end content-layer -->
 
-    <!-- ==================== JavaScript ==================== -->
     <script>
-    
-    // ========== 1. Cursor ==========
+    // ===== Cursor =====
     const dot  = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     document.addEventListener('mousemove', e => {
@@ -703,72 +915,74 @@ Enter<!DOCTYPE html>
         ring.style.top  = e.clientY + 'px';
     });
 
-    // ========== 2. Particle Trail ==========
-    const colors = ['#27ae60','#2ecc71','#c0392b','#e74c3c','#ffffff'];
-    document.addEventListener('mousemove', e => {
-        const p = document.createElement('div');
-        p.className = 'trail-particle';
-        const c = colors[Math.floor(Math.random() * colors.length)];
-        p.style.cssText = `
-            left:${e.clientX - 3}px;
-            top:${e.clientY - 3}px;
-            background:${c};
-            box-shadow:0 0 6px ${c};
-        `;
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 620);
-    });
+    // ===== Matrix Rain Canvas =====
+    (function() {
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // ========== 3. Background Sound (متكرر - يشتغل تلقائياً) ==========
-    const backgroundSoundSrc = "https://files.catbox.moe/ibid9i.mp3";
-    let bgAudio = new Audio(backgroundSoundSrc);
+        const chars = '01アイウエオカキクケコ#$%&@!01ABCDEF0xDEADBEEF</>{}[]';
+        const fontSize = 14;
+        const cols = Math.floor(canvas.width / fontSize);
+        const drops = Array(cols).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5,5,8,0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00f5ff';
+            ctx.font = fontSize + 'px Courier New';
+            drops.forEach((y, i) => {
+                const c = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(c, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(drawMatrix, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    })();
+
+    // ===== Background Sound =====
+    const bgAudio = new Audio('https://files.catbox.moe/ibid9i.mp3');
     bgAudio.loop = true;
-    bgAudio.volume = 0.25;
-
-    // محاولة تشغيل الصوت تلقائياً
-    bgAudio.play().then(() => {
-        console.log('✅ الصوت الخلفي اشتغل تلقائياً');
-    }).catch(() => {
-        console.log('⏳ المتصفح منع التشغيل التلقائي - هنشغل الصوت عند أول تفاعل');
-        // لو المتصفح منع التشغيل التلقائي، هنشغله عند أول نقرة أو لمس
-        document.addEventListener('click', function startAudio() {
-            bgAudio.play();
-            document.removeEventListener('click', startAudio);
-        }, { once: true });
+    bgAudio.volume = 0.2;
+    bgAudio.play().catch(() => {
+        document.addEventListener('click', () => bgAudio.play(), { once: true });
     });
 
-    // ========== 4. Logo Click Sound (لا يتكرر - مرة واحدة فقط) ==========
-    const clickSoundSrc = "https://files.catbox.moe/nu5r0f.aac";
+    // ===== Logo Click Sound =====
     document.getElementById('logoImage').addEventListener('click', e => {
-        e.stopPropagation(); // منع انتشار الحدث عشان ميتعارضش مع صوت الخلفية
-        const a = new Audio(clickSoundSrc);
-        a.volume = 0.7;
-        a.play(); // This is a one-shot sound, not looped - won't repeat
+        e.stopPropagation();
+        const a = new Audio('https://files.catbox.moe/nu5r0f.aac');
+        a.volume = 0.7; a.play();
     });
 
-    // ========== 5. Typewriter Effect ==========
-    function typewriter(el, speed = 38) {
-        const text = el.dataset.text || el.textContent;
-        el.dataset.text = text;
-        el.textContent  = '';
+    // ===== Typewriter =====
+    function typewriter(el, speed = 30) {
+        const full = el.innerHTML;
+        el.dataset.full = full;
+        el.innerHTML = '';
         let i = 0;
-        (function type() {
-            if (i < text.length) {
-                el.textContent += text[i++];
-                setTimeout(type, speed);
+        const interval = setInterval(() => {
+            if (i < full.length) {
+                el.innerHTML = full.slice(0, ++i);
+            } else {
+                clearInterval(interval);
             }
-        })();
+        }, speed);
     }
 
     const twTarget = document.getElementById('typewriterTarget');
-    twTarget.dataset.text = twTarget.textContent;
-
     document.getElementById('tab1').addEventListener('change', () => {
         setTimeout(() => typewriter(twTarget), 120);
     });
-    // Run once on load since tab1 is checked
-    setTimeout(() => typewriter(twTarget), 400);
-
+    setTimeout(() => typewriter(twTarget), 500);
     </script>
 </body>
 </html>
+
